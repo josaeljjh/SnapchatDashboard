@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Common -->
+    <string name="app_name">Snapchat Dashboard</string>
+    <string name="bottom">Discover</string>
+    <string name="center">Home</string>
+    <string name="top">Profile</string>
+    <string name="left">Settings</string>
+    <string name="right">More</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
