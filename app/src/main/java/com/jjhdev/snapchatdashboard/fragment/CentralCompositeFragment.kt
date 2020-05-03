@@ -46,15 +46,13 @@ class CentralCompositeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val fragmentView =
-            inflater.inflate(R.layout.fragment_composite_central, container, false)
+        val fragmentView = inflater.inflate(R.layout.fragment_composite_central, container, false)
         findViews(fragmentView)
         return fragmentView
     }
 
     private fun findViews(fragmentView: View) {
-        mHorizontalPager =
-            fragmentView.findViewById<View>(R.id.fragment_composite_central_pager) as ViewPager
+        mHorizontalPager = fragmentView.findViewById<View>(R.id.fragment_composite_central_pager) as ViewPager
         initViews()
     }
 
@@ -70,10 +68,12 @@ class CentralCompositeFragment : Fragment() {
         pages.add(CentralFragment::class.java)
         pages.add(RightFragment::class.java)
         mCentralPageIndex = pages.indexOf(CentralFragment::class.java)
-        mHorizontalPager!!.adapter = FragmentsClassesPagerAdapter(
-            childFragmentManager,
-            activity!!,
-            pages
-        )
+        mHorizontalPager!!.adapter = activity?.let {
+            FragmentsClassesPagerAdapter(
+                childFragmentManager,
+                it,
+                pages
+            )
+        }
     }
 }

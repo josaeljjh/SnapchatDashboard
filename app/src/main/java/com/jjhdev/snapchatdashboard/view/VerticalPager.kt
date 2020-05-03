@@ -16,12 +16,29 @@ import java.util.*
  * Contact : josaeljjh@gmail.com
  */
 
-class VerticalPager @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet?,
-    defStyle: Int = 0
-) :
-    ViewGroup(context, attrs, defStyle) {
+class VerticalPager @JvmOverloads constructor(context: Context, attrs: AttributeSet?, defStyle: Int = 0) : ViewGroup(context, attrs, defStyle) {
+
+    /**
+     * Used to inflate the Workspace from XML.
+     *
+     * @param context
+     * The application's context.
+     * @param attrs
+     * The attribtues set containing the Workspace's customization values.
+     * @param defStyle
+     * Unused.
+     */
+    /**
+     * Used to inflate the Workspace from XML.
+     *
+     * @param context
+     * The application's context.
+     * @param attrs
+     * The attribtues set containing the Workspace's customization values.
+     */
+    init {
+        init(context)
+    }
 
     var isPagingEnabled = true
     var pageHeight = 0
@@ -138,11 +155,11 @@ class VerticalPager @JvmOverloads constructor(
             // MeasureSpec.EXACTLY),
             // MeasureSpec.makeMeasureSpec(pageHeight,
             // MeasureSpec.UNSPECIFIED));
-            getChildAt(i).measure(
-                MeasureSpec.makeMeasureSpec(measuredWidth, MeasureSpec.EXACTLY),
+            getChildAt(i).measure(MeasureSpec.makeMeasureSpec(measuredWidth, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(pageHeight, MeasureSpec.EXACTLY)
             )
         }
+
         if (mFirstLayout) {
             scrollTo(getScrollYForPage(mCurrentPage), 0)
             mFirstLayout = false
@@ -605,25 +622,5 @@ class VerticalPager @JvmOverloads constructor(
         private const val TOUCH_STATE_REST = 0
         private const val TOUCH_STATE_SCROLLING = 1
     }
-    /**
-     * Used to inflate the Workspace from XML.
-     *
-     * @param context
-     * The application's context.
-     * @param attrs
-     * The attribtues set containing the Workspace's customization values.
-     * @param defStyle
-     * Unused.
-     */
-    /**
-     * Used to inflate the Workspace from XML.
-     *
-     * @param context
-     * The application's context.
-     * @param attrs
-     * The attribtues set containing the Workspace's customization values.
-     */
-    init {
-        init(context)
-    }
+
 }
