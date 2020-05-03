@@ -68,10 +68,10 @@ class CentralCompositeFragment : Fragment() {
         pages.add(CentralFragment::class.java)
         pages.add(RightFragment::class.java)
         mCentralPageIndex = pages.indexOf(CentralFragment::class.java)
-        mHorizontalPager!!.adapter = activity?.let {
+        mHorizontalPager!!.adapter = activity?.let { activity ->
             FragmentsClassesPagerAdapter(
                 childFragmentManager,
-                it,
+                activity,
                 pages
             )
         }

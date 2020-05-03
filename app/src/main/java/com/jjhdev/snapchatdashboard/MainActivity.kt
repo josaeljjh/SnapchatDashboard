@@ -1,7 +1,5 @@
 package com.jjhdev.snapchatdashboard
 
-import android.annotation.TargetApi
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
@@ -9,13 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.jjhdev.snapchatdashboard.event.EventBus
 import com.jjhdev.snapchatdashboard.event.PageChangedEvent
 import com.jjhdev.snapchatdashboard.view.VerticalPager
-import com.jjhdev.snapchatdashboard.view.VerticalPager2
 import com.squareup.otto.Subscribe
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private var CENTRAL_PAGE_INDEX:Int = 1
-var mVerticalPager: VerticalPager2? = null
+var mVerticalPager: VerticalPager? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

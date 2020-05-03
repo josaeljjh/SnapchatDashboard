@@ -16,29 +16,12 @@ import java.util.*
  * Contact : josaeljjh@gmail.com
  */
 
-class VerticalPager @JvmOverloads constructor(context: Context, attrs: AttributeSet?, defStyle: Int = 0) : ViewGroup(context, attrs, defStyle) {
-
-    /**
-     * Used to inflate the Workspace from XML.
-     *
-     * @param context
-     * The application's context.
-     * @param attrs
-     * The attribtues set containing the Workspace's customization values.
-     * @param defStyle
-     * Unused.
-     */
-    /**
-     * Used to inflate the Workspace from XML.
-     *
-     * @param context
-     * The application's context.
-     * @param attrs
-     * The attribtues set containing the Workspace's customization values.
-     */
-    init {
-        init(context)
-    }
+class VerticalPager @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet?,
+    defStyle: Int = 0
+) :
+    ViewGroup(context, attrs, defStyle) {
 
     var isPagingEnabled = true
     var pageHeight = 0
@@ -63,6 +46,27 @@ class VerticalPager @JvmOverloads constructor(context: Context, attrs: Attribute
     /**
      * Initializes various states for this workspace.
      */
+    /**
+     * Used to inflate the Workspace from XML.
+     *
+     * @param context
+     * The application's context.
+     * @param attrs
+     * The attribtues set containing the Workspace's customization values.
+     * @param defStyle
+     * Unused.
+     */
+    /**
+     * Used to inflate the Workspace from XML.
+     *
+     * @param context
+     * The application's context.
+     * @param attrs
+     * The attribtues set containing the Workspace's customization values.
+     */
+    init {
+        init(context)
+    }
     private fun init(context: Context) {
         mScroller = Scroller(getContext(), DecelerateInterpolator())
         mCurrentPage = 0
@@ -111,14 +115,17 @@ class VerticalPager @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     override fun computeScroll() {
-        if (mScroller!!.computeScrollOffset()) {
-            scrollTo(mScroller!!.currX, mScroller!!.currY)
-            postInvalidate()
-        } else if (mNextPage != INVALID_SCREEN) {
-            mCurrentPage = mNextPage
-            mNextPage = INVALID_SCREEN
-            clearChildrenCache()
+        mScroller?.let {
+            if (it.computeScrollOffset()) {
+                it.currX?.let { scrollTo(it, mScroller!!.currY) }
+                postInvalidate()
+            } else if (mNextPage != INVALID_SCREEN) {
+                mCurrentPage = mNextPage
+                mNextPage = INVALID_SCREEN
+                clearChildrenCache()
+            }
         }
+
     }
 
     override fun dispatchDraw(canvas: Canvas) {
@@ -155,11 +162,11 @@ class VerticalPager @JvmOverloads constructor(context: Context, attrs: Attribute
             // MeasureSpec.EXACTLY),
             // MeasureSpec.makeMeasureSpec(pageHeight,
             // MeasureSpec.UNSPECIFIED));
-            getChildAt(i).measure(MeasureSpec.makeMeasureSpec(measuredWidth, MeasureSpec.EXACTLY),
+            getChildAt(i).measure(
+                MeasureSpec.makeMeasureSpec(measuredWidth, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(pageHeight, MeasureSpec.EXACTLY)
             )
         }
-
         if (mFirstLayout) {
             scrollTo(getScrollYForPage(mCurrentPage), 0)
             mFirstLayout = false
@@ -196,24 +203,24 @@ class VerticalPager @JvmOverloads constructor(context: Context, attrs: Attribute
         immediate: Boolean
     ): Boolean {
         val screen = indexOfChild(child)
-        return if (screen != mCurrentPage || !mScroller!!.isFinished) {
-            true
-        } else false
+        return screen != mCurrentPage || !mScroller!!.isFinished
     }
 
     override fun onRequestFocusInDescendants(
         direction: Int,
-        previouslyFocusedRect: Rect
+        previouslyFocusedRect: Rect?
     ): Boolean {
-        val focusableScreen: Int
-        focusableScreen = if (mNextPage != INVALID_SCREEN) {
+        val focusableScreen: Int = if (mNextPage != VerticalPager.INVALID_SCREEN) {
             mNextPage
         } else {
             mCurrentPage
         }
-        getChildAt(focusableScreen).requestFocus(direction, previouslyFocusedRect)
+        previouslyFocusedRect?.let {
+            getChildAt(focusableScreen).requestFocus(direction, previouslyFocusedRect)
+        }
         return false
     }
+
 
     override fun dispatchUnhandledMove(
         focused: View,
@@ -252,17 +259,6 @@ class VerticalPager @JvmOverloads constructor(context: Context, attrs: Attribute
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
         if (!isPagingEnabled) return false
 
-        // Log.d(TAG, "onInterceptTouchEvent::action=" + ev.getAction());
-
-        /*
-		 * This method JUST determines whether we want to intercept the motion. If we return true, onTouchEvent will be
-		 * called and we do the actual scrolling there.
-		 */
-
-        /*
-		 * Shortcut the most recurring case: the user is in the dragging state and he is moving his finger. We want to
-		 * intercept this motion.
-		 */
         val action = ev.action
         if (action == MotionEvent.ACTION_MOVE && mTouchState != TOUCH_STATE_REST) {
             // Log.d(TAG, "onInterceptTouchEvent::shortcut=true");
@@ -286,8 +282,11 @@ class VerticalPager @JvmOverloads constructor(context: Context, attrs: Attribute
                 /*
 			 * If being flinged and user touches the screen, initiate drag; otherwise don't. mScroller.isFinished should
 			 * be false when being flinged.
-			 */mTouchState =
-                    if (mScroller!!.isFinished) TOUCH_STATE_REST else TOUCH_STATE_SCROLLING
+			 */
+                mScroller?.let {
+                    mTouchState = if (mScroller!!.isFinished) TOUCH_STATE_REST else TOUCH_STATE_SCROLLING
+                }
+
             }
             MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
                 // Release the drag
@@ -331,12 +330,12 @@ class VerticalPager @JvmOverloads constructor(context: Context, attrs: Attribute
         }
     }
 
-    fun enableChildrenCache() {
+    private fun enableChildrenCache() {
         setChildrenDrawingCacheEnabled(true)
         isChildrenDrawnWithCacheEnabled = true
     }
 
-    fun clearChildrenCache() {
+    private fun clearChildrenCache() {
         isChildrenDrawnWithCacheEnabled = false
     }
 
@@ -449,13 +448,14 @@ class VerticalPager @JvmOverloads constructor(context: Context, attrs: Attribute
         if (focusedChild != null && changingPages && focusedChild === getChildAt(mCurrentPage)) {
             focusedChild.clearFocus()
         }
-        val delta: Int
-        delta = if (getChildAt(whichPage).height <= pageHeight || where == TOP) {
+        val delta: Int = if (getChildAt(whichPage).height <= pageHeight || where == TOP) {
             getChildAt(whichPage).top - scrollY
         } else {
             getChildAt(whichPage).bottom - pageHeight - scrollY
         }
-        mScroller!!.startScroll(0, scrollY, 0, delta, duration)
+        mScroller?.let {
+            it.startScroll(0, scrollY, 0, delta, duration)
+        }
         invalidate()
     }
 
@@ -488,6 +488,8 @@ class VerticalPager @JvmOverloads constructor(context: Context, attrs: Attribute
             duration
         )
     }
+
+
 
     override fun onSaveInstanceState(): Parcelable? {
         val state =
@@ -541,7 +543,7 @@ class VerticalPager @JvmOverloads constructor(context: Context, attrs: Attribute
     class SavedState : BaseSavedState {
         var currentScreen = -1
 
-        internal constructor(superState: Parcelable?) : super(superState) {}
+        internal constructor(superState: Parcelable?) : super(superState)
         private constructor(`in`: Parcel) : super(`in`) {
             currentScreen = `in`.readInt()
         }
@@ -622,5 +624,6 @@ class VerticalPager @JvmOverloads constructor(context: Context, attrs: Attribute
         private const val TOUCH_STATE_REST = 0
         private const val TOUCH_STATE_SCROLLING = 1
     }
+
 
 }
