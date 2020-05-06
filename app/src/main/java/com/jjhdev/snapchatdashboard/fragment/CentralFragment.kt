@@ -41,6 +41,5 @@ class CentralFragment : Fragment() {
         btnAugs.setOnClickListener { pager!!.currentItem = 2 }
         btnProfile.setOnClickListener { mCenterActivity!!.mVerticalPager?.snapToPage(0) }
         btnDiscover.setOnClickListener { mCenterActivity!!.mVerticalPager?.snapToPage(2) }
-
     }
 }
